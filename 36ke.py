@@ -1,5 +1,6 @@
 import time
 
+import execjs
 import requests
 
 url = "https://gateway.36kr.com/api/mus/login/byMobilePassword"
@@ -28,10 +29,16 @@ headers = {
 user_name = "13278883128"
 password = "llhqq393089025"
 def getAccountAndPassword(user_name,password):
-
+    with open("36ke.js", 'r', encoding='utf-8') as file:
+        js_code = file.read()
+        js_code_compile = execjs.compile(js_code)
+        user_name = js_code_compile.call("get_data",user_name)
+        password = js_code_compile.call("get_data",password)
     return user_name, password
 
-mobileNo,password = getAccountAndPassword()
+print(getAccountAndPassword(user_name, password))
+
+mobileNo,password = getAccountAndPassword("13278883128","llhqq393089025")
 
 data = {
     "krtoken": "",
