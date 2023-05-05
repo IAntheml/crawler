@@ -2112,7 +2112,7 @@ t = new v["a"]
 function get_encode(publicKey,e) {
     sign = CryptoJS.MD5(e).toString()
     e.sign = sign
-    e.timeStamp = +new Date
+    e.timeStamp = 1683279163738
     t.setPublicKey(publicKey)
     return t.encryptLong(JSON.stringify(e))
 }
