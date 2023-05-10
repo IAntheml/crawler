@@ -25,5 +25,8 @@
             + proxy_array[i] + '=new Proxy(' + proxy_array[i] + ', ' + handler + ')}')
         }
     }
-
+    
     proxy_array = ['window','document','navigator','location']
+
+
+    get_enviroment(proxy_array)
