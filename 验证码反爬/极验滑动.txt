@@ -1,5 +1,7 @@
 获取图片的方式：document.getElementByClassName()[0].toDataURL()
 
+第一步还原地图，点击事件监听器，选择画布然后点击刷新验证图片
+
 https://www.geetest.com/demo/gt/register-slide?t=1684052625276
 import requests
 headers = {
