@@ -1,0 +1,79 @@
+获取图片的方式：document.getElementByClassName()[0].toDataURL()
+
+https://www.geetest.com/demo/gt/register-slide?t=1684052625276
+import requests
+headers = {
+    "authority": "www.geetest.com",
+    "accept": "application/json, text/javascript, */*; q=0.01",
+    "accept-language": "en-US,en;q=0.9",
+    "cache-control": "no-cache",
+    "pragma": "no-cache",
+    "referer": "https://www.geetest.com/demo/slide-float.html",
+    "sec-ch-ua": "^\\^Google",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "^\\^Windows^^",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+    "x-requested-with": "XMLHttpRequest"
+}
+url = "https://www.geetest.com/demo/gt/register-slide"
+params = {
+    "t": Date.date()
+}
+response = requests.get(url, headers=headers, params=params)
+
+print(response.text)
+print(response)
+
+
+
+验证请求：
+https://api.geetest.com/ajax.php
+
+请求头部
+{
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Connection": "keep-alive",
+    "Cookie": "GeeTestAjaxUser=69da84632811e548aa3493488ebd3125; GeeTestUser=006ad9d9ff144319130369a1b524ea90",
+    "Host": "api.geetest.com",
+    "Pragma": "no-cache",
+    "Referer": "https://www.geetest.com/",
+    "Sec-Fetch-Dest": "script",
+    "Sec-Fetch-Mode": "no-cors",
+    "Sec-Fetch-Site": "same-site",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+    "sec-ch-ua": "\"Google Chrome\";v=\"113\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\""
+}
+
+请求载荷
+{
+    "gt": "019924a82c70bb123aae90d483087f94",  来自请求https://www.geetest.com/demo/gt/register-slide?t=1684052625276
+    "challenge": "e56940a94b5dd60aa29cb324177e02414p", 来自https://api.geetest.com/get.php，该请求中的gt和challenge同样来自https://www.geetest.com/demo/gt/register-slide?t=1684052625276
+    "$_BCX": "0",
+    "client_type": "web",
+    "w": "xIxzmuXZlhjIgwhmFRIOrDdD5uQJ9uWyUqhlijbxBfOQWC)xRefoK)bFDrA4R2wFcSnx95wTSw7ieLVh06h(RfGiB8(e6qj6(gZaRrCWvKOCeSHXVA8Atfm4h9(0XFNyomm8dZdL5H4zRnZH7Y18Ai)xA6FDRSRu4cstNkwnZYyHGsSOdAF5(V)WFoTKrJDkcbvSs22WQPOjBNwZzfMCXvC8Br)yTliNq90vBUYr7OWDjTdeIyoMX1xJQkQSWD(vvG0zf6Lyx5(yVwetHMHp55VelscLBJx96(Ka8gjpuBl4zxPKFLYNYZztf6VH9AR6s8kySKFiBTAzrtXHcn66qFFp7gFyk6aYhuGgAMbM9ONOOPJB1FH3l)o)KVT(7wKnlcW3hw3lbZhKyZB(wLwyiecInFSmEMCwFmH3XInCv5aPySbOrdCBNbGejH2mlogzjJrEBZOSmNDeazbR(R)Ed5q3Y(nvjNuW(V70PxRuDmDq9xMO(PTDNyHy64uPFf0)GRn2TSNKCMmvEePrEE)pyr55TNz7NcEfZLvRQH01aRouNoNjuSCkhYjY5R14pyiBJE2a(IxtSZLR0LfSraAh5zWZTpqHQw5O)71SyHfFZCiZgwbokD7RTmyAp0tmDNURMcECkQo)HB5eL41KGVBy4TfQN4S1bd9c88agmYlLCGEIXgR47xltTKk9akRsaz6e7TuzrEmF944TABOzKXGHcvxo5hO1t(E6mCWF1qYfzLXhrlrXPeoZbMY1cBOKCmgbDkLk7UZAsYTw2ay0WGKZiBSq9mSLO0dOwrlCb3tiCpK)BT7gikmHPQdcNTzO5NEbQ(qLm68cAgmRThhEKzQ)slj1LnkycXJ7liuLvaHG86JHswoa1qlGFvdrAVGRuqAjiqVQgxMxy6Ehy76Q1rW)gQ..856bc088974c6086c06ede9fa6e30cebd211524e640de19e18d5586d0057b257781cff6f6e8824e18a011b08745856a92fb01f2e9db809a00f4a8c74cbf1660a82f31da48aba6a5d450926a40430f1522ca4fa417417e540c9ccc8c57fadeb2fe38c3252dadcb15b9f0ec729aeb5977522733ae290ff90ca091e233c87fa9f88",
+    "callback": "geetest_1684052640405"
+}
+
+
+w = h+u
+
+o = {
+"lang": i[$_CAHJe(169)] || $_CAIAj(152), //
+"userresponse": H(t, i[$_CAHJe(172)]),
+"passtime": n,
+"imgload": r[$_CAIAj(796)],
+"aa": e,
+"ep": r[$_CAHJe(724)]()
+};
+
+l = V[$_CAHJe(372)](gt[$_CAHJe(239)](o), r[$_CAIAj(761)]()); //V['encrypt'](gt['stringify'](o), r['$_CCEV']())
+h = m[$_CAIAj(783)](l)              //m['$_FEE'](l)
+var u = r[$_CAHJe(785)]()           // r['$_CCDf']()
