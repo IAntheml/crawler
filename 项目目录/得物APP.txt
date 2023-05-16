@@ -1,0 +1,197 @@
+1. 抓包
+    APP版本：4.74.5 & 模拟器 & drony
+
+    请求：
+		- https://app.dewu.com/sns-rec/v1/search/prompt
+		- POST
+			{
+				"loginToken": "",
+				"newSign": "7863a82fd9235c85399da5e1140237af",   【核心】 ---> 搞定
+				"platform": "android",
+				"timestamp": "1653999405468",
+				"uuid": "23cbedaf5331524f",
+				"v": "4.74.5",
+				"word": "阿"
+			}
+
+		- 请求头
+			duuuid: 23cbedaf5331524f（安卓ID，代码实现）
+			duimei: 008796763151875 (可以不带)
+			timestamp: 1653999405468
+			shumeiid: 20220308150353b147dc388ea958b1f408f5eae7f813e1014c577766a5453f
+				- 固定
+				- 随机值
+			X-Auth-Token: Bearer eyJhbGciOiJSUz。。。
+				- jwt（向后端发送请求，返回jwt token）
+
+		目标：
+			- newSign算法
+			- X-Auth-Token是怎么来的？其他的请求
+
+
+2.newSign算法
+	根据关键字搜索：newSign   "newSign"
+
+	2.1 找到了3个地方
+		m30622b
+		m30620a
+		m30623c
+			com.shizhuang.duapp.common.utils;
+			RequestUtils
+			c
+
+		第1步：连接手机启动frida-server
+		第2步：端口转发
+		第3步：运行hook（app启动）
+
+		留个坑
+
+	2.2 需要搞定
+		本质原因：  我通过这个算法那实现了这个功能 +
+
+
+		- 参数：map、j是什么？     如果我们能hook到？
+			{word=阿}
+
+		- 拼接逻辑
+			map.put("uuid", DuHttpConfig.f21348d.getUUID());             【android_id】
+            map.put("platform", "android");
+            map.put("v", DuHttpConfig.f21348d.getAppVersion());          【固定4.74.5】
+            map.put("loginToken", DuHttpConfig.f21348d.getLoginToken());【空字符串】
+            map.put("timestamp", String.valueOf(j));                    【时间戳】
+
+			map = {"uuid":123,'oaid':'xxx'...}
+            list = [ (uuid,123), ("oaid","xxxx")]
+			"uuid123oaidxxxx"
+		- AESEncrypt.encode(DuHttpConfig.f21347c, sb2)            -> 分析so
+		- m30618a(AESEncrypt.encode(DuHttpConfig.f21347c, sb2));  -> md5加密
+
+		newSign结果。
+
+
+		接下来，就需要解决：
+			- hook
+			- 分析so
+
+	2.3 hook问题
+		hook加密encode方法 + 调用栈
+
+			import frida
+			import sys
+
+			rdev = frida.get_remote_device()
+			session = rdev.attach("com.shizhuang.duapp")
+
+			scr = """
+			Java.perform(function () {
+			    var AESEncrypt = Java.use("com.duapp.aesjni.AESEncrypt");
+
+			    AESEncrypt.encode.overload('java.lang.Object', 'java.lang.String').implementation = function(obj,str){
+			        console.log("9999");
+
+			        // 输出调用栈
+			        console.log(Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Throwable").$new()));
+			        var res = this.encode(obj,str);
+			        return res;
+			    }
+
+			});
+			"""
+			script = session.create_script(scr)
+
+
+			def on_message(message, data):
+			    print(message, data)
+
+
+			script.on("message", on_message)
+			script.load()
+			sys.stdin.read()
+
+
+		调用栈
+			at com.duapp.aesjni.AESEncrypt.encode(Native Method)
+			at com.shizhuang.duapp.common.utils.RequestUtils.b(RequestUtils.java:11)
+			at com.shizhuang.duapp.common.helper.net.interceptor.HttpRequestInterceptor.intercept(HttpRequestInterceptor.java:43)
+			at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:10)
+			at okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.java:1)
+			at okhttp3.RealCall.getResponseWithInterceptorChain(RealCall.java:13)
+
+
+		重新hook
+			com.shizhuang.duapp.common.utils.RequestUtils.b
+
+
+	2.4 encode和so的问题
+		str = "loginTokenplatformandroidtimestamp1654003399645uuid23cbedaf5331524fv4.74.5word阿"
+
+
+	    static {
+	        try {
+	            System.loadLibrary("JNIEncrypt");
+	        } catch (UnsatisfiedLinkError e) {
+	            e.fillInStackTrace();
+	        }
+	    }
+
+		public static String encode(Object obj, String str) {
+
+	        // 100100101001010101010010101010101001010101
+	        String byteValues = getByteValues(); // 调用so获取到字符串
+
+	        // 0110110101101....
+	        StringBuilder sb = new StringBuilder(byteValues.length());
+	        for (int i = 0; i < byteValues.length(); i++) {
+	            if (byteValues.charAt(i) == '0') {
+	                sb.append('1');
+	            } else {
+	                sb.append('0');
+	            }
+	        }
+	        // 第1个参数 = "loginTokenplatformandroidtimestamp1654003399645uuid23cbedaf5331524fv4.74.5word阿"
+	        // 第2个参数，0110110101101.... 如果想要知道，按理说应该先分析getByteValues。但是，你不用分析了。
+	        	- getByteValues是一个固定
+	        	- 第2个参数传入后内部根本没使用。
+	        return encodeByte(str.getBytes(), sb.toString());
+	    }
+
+	    public static native String encodeByte(byte[] bArr, String str);
+
+
+	2.5 AES加密，hook参数（明文、key/iv）
+
+		对so文件进行hook，不能用模拟器了，只能真机。
+
+		- 写Hook脚本
+
+			-------------参数 1-------------
+			loginTokenplatformandroidtimestamp1654007125008title阿uuidc71e2a6d5ab50586v4.74.5
+			-------------参数 2-------------
+			d245a0ba8d678a61
+
+
+			内部进行的AES加密
+
+			-------------返回-------------
+			knGGXR0bR7LQn4eRCvJsdZ4D96wrRcYi2zPWWxLMOs1ura/7dFNpIQwX+lRiuPG1Nr1bgqZ09o32ZABLUGJohtTKMpsa7F8VmEr9o5yxjyogcC5nxtQ8XMr58ZrAGi9u
+
+			knGGXR0bR7LQn4eRCvJsdZ4D96wrRcYi2zPWWxLMOs1xiOZgaOKuElijT8MyP5egNr1bgqZ09o32ZABLUGJohtTKMpsa7F8VmEr9o5yxjyogcC5nxtQ8XMr58ZrAGi9u
+
+
+
+
+3.找X-Auth-Token
+	https://app.dewu.com/api/v1/app/user_core/users/getVisitorUserId
+	post请求
+		{
+			"loginToken": "",
+			"platform": "android",
+			"timestamp": "1654007757629",
+			"uuid": "23cbedaf5331524f",
+			"v": "4.74.5",
+			"newSign": "1b05c9abcee726ad3866ee0bafe801fc",
+		}
+	请求头：
+		...
+
+
