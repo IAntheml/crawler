@@ -21,3 +21,8 @@
 /*
 常用几个id的python实现：AndroidID、UUID、mac、IMEI
  */
+
+
+/*
+    b>>>4 位移操作可以用python函数int_overflow()和unsigned_right_shitf()实现
+ */
