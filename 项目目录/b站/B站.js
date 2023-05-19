@@ -26,3 +26,12 @@
 /*
     b>>>4 位移操作可以用python函数int_overflow()和unsigned_right_shitf()实现
  */
+
+/*
+IDA反编译后动态注册的补充，找RegisterNatives：libart.so
+
+
+第一步 libart.so中找RegisterNatives方法 -> 内存地址
+第二步：基于内存地址进行hook，找到第三个参数（2索引位置）
+第三步：gMethods对应关系 -> s -> ？函数
+ */
