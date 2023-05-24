@@ -1,8 +1,8 @@
 """
 python编写+js代码
 
-pip install frida == 14.2.18
-pip install frida-tools=9.2.5
+pip install frida==14.2.18
+pip install frida-tools==9.2.5
 
 手机上安装的frida需要和pc一致，都为14.2.18
 
@@ -28,15 +28,13 @@ https://github.com/frida/frida/releases?page=8
     cd /data/local/tmp/
     ./frida-server-14.2.18-android-arm64
 
+手机端启动完frida的服务器后，在电脑端的操作如下：
+    -adb forward tcp:27042 tcp:27042
+    -adb forward tcp:27043 tcp:27043
 
 adb命令学习：
     adb -s 设备名 shell #登录设备
     adb push C:/XXX /sdcard/
-
-
-手机端启动玩frida的服务器后，在电脑端的操作如下：
-    -adb forward tcp:27042 tcp:27042
-    -adb forward tcp:27043 tcp:27043
 
 编写hook脚本：Python+JS代码
 
