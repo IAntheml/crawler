@@ -37,6 +37,7 @@ windows系统：
 """
 import pymongo
 import redis
+import scrapy
 
 """
 
@@ -106,5 +107,26 @@ class MongoPipeline:
         self.conn.close()
 """
 
+"""
+
+图片类数据的爬取
+from scrapy.pipelines.images import ImagesPipeline
 
 
+class mediaPipeLine(ImagesPipeline):
+    # 重写父类的三个方法来完成图片的二进制数据的请求和持久化存储
+    # 可以根据图片地址，对其进行请求，获取图片资源
+    def get_media_requests(self, item, info):
+        img_src = item['src']
+        yield scrapy.Request(img_src)
+
+    # 指定图片的名称（只需要返回图片存储的名称即可）
+    def file_path(self, request, response=None, info=None, *, item=None):
+        img_name = request.url.split('/')[-1]
+        return img_name
+
+    def item_completed(self, results, item, info):
+        # 可以将当前的管道类接收到的item传递给下一个管道类
+        return item
+
+"""
