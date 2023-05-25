@@ -134,10 +134,14 @@ class mediaPipeLine(ImagesPipeline):
     在配置文件中开启管道、指定图片存储文件夹的名字IMAGES_STORE=文件名称
 """
 
-
 """
 
 深度爬取
-    -
+    - 如何提高scrapy的爬取效率
+        - 增加并发，在setting中修改CONCURRENT_REQUESTS = 100
+        - 降低日志级别：LOG_LEVEL = 'ERROR'或者LOG_LEVEL = 'WARNING'
+        - 禁止cookie COOKIES_ENABLED = False
+        - 禁止重试：RETRY_ENABLED = False
+        - 减少下载超时：DOWNLOAD_TIMEOUT = 10 超时时间为10秒，超时则被放弃
 
 """
