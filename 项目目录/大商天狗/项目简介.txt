@@ -1,0 +1,15 @@
+目标：脱壳处理
+
+加壳的特征：jadx反编译后有两个包-com.qihoo.util和com.stub
+
+安卓开发： java -> 编译 -> apk (压缩包，class.dex class2.dex文件) -> qihoo -> 处理成非dex文件
+
+脱壳（smali,搭建安卓源码运行的虚拟机，底层汇编和c++）将其他格式 -> class.dex
+
+    -工具
+        -arm pro（收费）
+        -Fridadexdump
+        -Blackdex.apk
+        -反射大师.apk
+        -Fart(脱壳的虚拟机，需要了解安卓底层原理)
+
