@@ -110,6 +110,8 @@ class MongoPipeline:
 """
 
 图片类数据的爬取
+pip install Pillow
+
 from scrapy.pipelines.images import ImagesPipeline
 
 
@@ -128,5 +130,14 @@ class mediaPipeLine(ImagesPipeline):
     def item_completed(self, results, item, info):
         # 可以将当前的管道类接收到的item传递给下一个管道类
         return item
+    
+    在配置文件中开启管道、指定图片存储文件夹的名字IMAGES_STORE=文件名称
+"""
+
+
+"""
+
+深度爬取
+    -
 
 """
