@@ -145,3 +145,27 @@ class mediaPipeLine(ImagesPipeline):
         - 减少下载超时：DOWNLOAD_TIMEOUT = 10 超时时间为10秒，超时则被放弃
 
 """
+
+
+"""
+    - 发post请求：爬虫文件中重写start_requests方法，yield scrapy.FormRequest(url, callback = self.parse,fdata=data)
+"""
+
+
+"""
+Scrapy的五大核心组件
+    -引擎
+    -调度器
+    -下载器
+    -爬虫
+    -项目管道
+"""
+
+
+"""
+中间件：爬虫中间件和下载中间件
+    -代理中间件
+    -UA中间件
+    -Cookie中间件
+    
+"""
