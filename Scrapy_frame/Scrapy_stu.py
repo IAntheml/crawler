@@ -169,3 +169,21 @@ Scrapy的五大核心组件
     -Cookie中间件
     
 """
+
+"""
+scrapy+selenium编码流程
+    -在爬虫文件中定义浏览器对象，将浏览器对象作为爬虫类的一个成员变量
+    -在中间件中通过spider获取爬虫文件中定义的浏览器对象，进行请求发送和获取响应数据
+    -在爬虫文件中重写一个closed方法，关闭浏览器对象
+"""
+
+
+"""
+CrawlSpider-全栈数据爬取
+   -使用流程
+   -新建一个scrapy项目
+   -cd项目
+   -创建爬虫文件(*):
+        - scrapy genspider -t crawl spiderName www.xxx.com
+        - 生成的爬虫文件父类是CrawlSpider，多了一个rules元组  
+"""
