@@ -187,3 +187,5 @@ CrawlSpider-全栈数据爬取
         - scrapy genspider -t crawl spiderName www.xxx.com
         - 生成的爬虫文件父类是CrawlSpider，多了一个rules元组  
 """
+
+
