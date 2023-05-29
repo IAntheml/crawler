@@ -188,4 +188,67 @@ CrawlSpider-全栈数据爬取
         - 生成的爬虫文件父类是CrawlSpider，多了一个rules元组  
 """
 
+"""
+爬虫应用场景分类：
+    -通用爬虫
+    -聚焦爬虫
+    -功能爬虫
+    -分布式爬虫
+    -增量式爬虫
+        -用来监测网站数据更新的情况（爬取网站最新更新出来的数据）
+        -核心：去重，使用一个记录表实现，记录表中存放爬取过的数据记录
+            可以选择Redis的Set集合作为去重方案，每行数据可以用md5生产数据指纹
+            import hashlib
+            m = hashlib.md5()
+            m.update(all_data.encode('utf-8'))
+            data_id = m.hexdigest()
+        
+        注意Redis版本的问题，pip install redis == 2.10.6才可以将字典直接lpush到redis中
+"""
+
+
+"""
+
+scrapy项目部署
+    -scrapyd: 会以守护进程的方式存在系统中，监听爬虫的运行和请求，然后启动进程来执行爬虫程序。
+        -安装scrapyd服务：pip install scrapyd
+        -安装scrapyd客户端：pip install scrapyd-client
+        -启动scrapyd服务，打开终端在scrapy项目路径下启动scrapyd的命令：scrapyd
+        -找到项目的scrapy.cfg，[deploy:部署名]，url是部署地址，project默认就行，username = xxx, password = xxx如果不需要用户名和密码可以不写
+        -scrapyd -deploy 部署名 -p 项目名称，status为ok时表示部署成功
+        -终端查看部署情况：scrapyd -deploy -l
+管理scrapy项目
+    指令管理
+    -安装curl命令行工具
+        -window需要安装 https://curl.se/download.html
+            -Windows 64 bit binary Chocolatey
+            -下载完成后，放置到无中文的文件夹下解压缩，解压后将bin文件夹配置环境变量
+            -参考：https://www.cnblogs.com/lisa2016/p/12193494.html
+        -linux和mac无需单独安装
+    启动项目
+        -curl http://localhost:6800/schedule.json -d project=项目名 -d spider=爬虫名
+        返回结果：注意其中的jobid
+    关闭项目
+        -curl http://localhost:6800/cancel.json -d project=项目名 -d job=项目的jobid
+    删除爬虫项目：
+        -curl http://localhost:6800/delproject.json -d project=爬虫项目名称
+    
+    requests模块控制scrapy项目
+        import requests
+        # 启动爬虫
+        url = 'http://localhost:6800/schedule.json'
+        data = {
+            'project':项目名,
+            'spider':爬虫名,
+        }
+        resp = requests.post(url,data=data)
+        
+        # 停止爬虫
+        url = 'http://localhost:6800/cancel.json'
+        data = {
+            'project':项目名,
+            'job':启动爬虫时返回的jobid,
+        }
+        resp = requests.post(url,data=data)
+"""
 
