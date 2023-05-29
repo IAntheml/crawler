@@ -19,6 +19,7 @@ class DeepimgproPipeline(ImagesPipeline):
     def file_path(self, request, response=None, info=None, *, item=None):
         title = request.meta['title']
         print(title, '保存下载成功！')
+        # 返回内容就是文件名
         return title
 
     def item_completed(self, results, item, info):
