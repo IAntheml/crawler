@@ -93,8 +93,6 @@ def r(data_string):
 
     return "".join(char_list)
 
-
-
 ep = {
     "hdid": "JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw=",
     "ts": 1685280661728,
@@ -113,9 +111,6 @@ ep = {
     "appname": "com.jingdong.app.mall"
 }
 
-
-
-
 headers = {
     "Host": "api.m.jd.com",
     "j-e-h": "%7B%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22ts%22%3A1685280663105%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22user-agent%22%3A%22b2jedRHmBzCkCJSkCJjgZQ1rbQm7YW5ucw9fZNj2ZXTzaW9kBzOmBtGkDNjsdWviZM85Czq2CNjzY3TvZW4lCJK4CRqyCJCnE29zBzu7%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.2.0%22%2C%22appname%22%3A%22com.jingdong.app.mall%22%7D",
@@ -124,11 +119,14 @@ headers = {
     "cache-control": "no-cache",
     "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 }
+
 cookies = {
     "whwswswws": "JD012145b90GYSAivwAy1685280662178056yXkOahx6j6t9KjS2zyNvUdAhP7fxIMfyHwvREFzcnmTK6eqcKSXUC4Kj9wJ_vnpjJv7qGKUUJxQkmV3IwdA-Xv91TzmWDv_QXgEh-kYPt40lpf7x5~hl8khL-gOmsFg1QBe7KBvsHA4MDa1zBKU_40NNqcByh8UnMJYTP5KiUqXmW0TtaE7gbzB1LG-XG-nstJuofXD-c3RDSZIb_B2T69pUaIGW8Mir_o5h-mRKE1Wbm6YdvcvsIfPE88g6AfCHaF6AJW79uGcPutdj55m4P-9kwUzEIs",
     "unionwsws": "{\"devicefinger\":\"eidAffea81233esf69zWQMLtTJ6GqLRTKaULVuvc18kle3F0tbMsCPPOsnNcxWWN5m71wGNZqOmxUbpYt60ie5cZVCzuzqOARpIRdm1cmoL4Wzfhx9h3\",\"jmafinger\":\"JD012145b90GYSAivwAy1685280662178056yXkOahx6j6t9KjS2zyNvUdAhP7fxIMfyHwvREFzcnmTK6eqcKSXUC4Kj9wJ_vnpjJv7qGKUUJxQkmV3IwdA-Xv91TzmWDv_QXgEh-kYPt40lpf7x5~hl8khL-gOmsFg1QBe7KBvsHA4MDa1zBKU_40NNqcByh8UnMJYTP5KiUqXmW0TtaE7gbzB1LG-XG-nstJuofXD-c3RDSZIb_B2T69pUaIGW8Mir_o5h-mRKE1Wbm6YdvcvsIfPE88g6AfCHaF6AJW79uGcPutdj55m4P-9kwUzEIs\"}"
 }
+
 url = "https://api.m.jd.com/client.action"
+
 params = {
     "functionId": "backupKeywords",
     "clientVersion": "10.4.4",
@@ -149,10 +147,12 @@ params = {
     "sign": "4663125c16e6839d22f1191c6c032042",
     "sv": "121"
 }
+
 data = {
     "body": "{\"keyword\":\"茅台\"}",
     "": ""
 }
+
 response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
 
 print(response.text)
