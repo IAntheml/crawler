@@ -38,5 +38,6 @@ cookies = {
 url = "https://www.amazon.com/TP-Link-Deco-Whole-System-2-Pack/product-reviews/B0797D6853"
 response = requests.get(url, headers=headers, cookies=cookies)
 
+print(response.status_code)
 print(response.text)
 print(response)
