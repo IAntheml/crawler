@@ -1,0 +1,22 @@
+a.cookie ? a.cookie.updateCsmHit(m, b + ("|" + +new Date)) : e.cookie = "csm-hit=" + b + ("|" + +new Date) + n + "; path=/")
+
+
+m = tb
+b + ("|" + +new Date) = 's-JXMJF5G0M2KKZGMBEJ4H|1685525000872'
+
+
+
+d = window.localStorage;
+f = d.getItem("csm-hit")
+a = f
+
+a = q('tb:CPJ7V5RF5BN5Y6Y7F0HK+s-WJW4SQY7V4SFW9800MJA|1685523236544&t:1685523236696&adb:adblk_no', "tb", 's-JXMJF5G0M2KKZGMBEJ4H|1685525000872')
+//可以直接手扣
+r = a = q(a, "t", +new Date);
+//可以直接手扣
+function m(b, e, c) {
+                        c = c || new Date(+new Date + t);
+                        c = "expires=" + c.toUTCString();
+                        n.cookie = b + "=" + e + ";" + c + ";path=/"
+                    }
+//可以直接手扣
