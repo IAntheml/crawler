@@ -1,6 +1,6 @@
 import requests
 from lxml import etree
-
+import re
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "Accept-Encoding": "gzip, deflate, br",
@@ -33,10 +33,10 @@ cookies_sec = {
 }
 
 response = requests.get(url, headers=headers, cookies=cookies_sec)
-
+token_response = response.text
 print(response.status_code)
 # print(response.text)
-html = etree.HTML(response.text)
+html = etree.HTML(token_response)
 catalog_list = html.xpath('/html/body/div[1]/div[2]/div[2]/div/div/div/div[2]/div/div[2]/div/div/div[2]/div/a/@href')
 
 # 获取二级菜单所有连接
@@ -50,13 +50,9 @@ for catalog in catalog_list:
 print(catalog_url_list)
 
 # 获取token
+
+token = re.findall('data-acp-params="(.*?)"', token_response)[0]
 """
-data-acp-params="tok=tzjJDJCRV9cxP9a5vF0V5LEnSAowllsu5mFyyRWMf_c;ts=1685613108254;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
-data-acp-params="tok=tzjJDJCRV9cxP9a5vF0V5LEnSAowllsu5mFyyRWMf_c;ts=1685613108254;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
-data-acp-params="tok=zdf66t8ugzSEIafwk4UGecPDZTXtPUy1mTkumLp2muY;ts=1685613108256;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
-data-acp-params="tok=0AihgDpky6B4Ypx5x_pckwq6YJa9EP8uEhTs5a6kDZQ;ts=1685613108260;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
-data-acp-params="tok=zdf66t8ugzSEIafwk4UGecPDZTXtPUy1mTkumLp2muY;ts=1685613108256;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
-data-acp-params="tok=7pYnjS9JHDwCS0ynwEuwFp7TMASKVKXZeIuTvjSPK9A;ts=1685613108255;rid=GER8BJF1PH501EFQCT8W;d1=816;d2=0;
 """
 
 ""
