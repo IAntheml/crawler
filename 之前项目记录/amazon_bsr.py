@@ -69,6 +69,7 @@ headers = {
     "viewport-width": "1384"
 }
 response = requests.get(url, headers=headers)
+print(response.status_code)
 html = etree.HTML(response.text)
 
 pre_link = "https://www.amazon.com"
