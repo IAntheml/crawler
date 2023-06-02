@@ -132,13 +132,15 @@ def get_next_page_url(html):
     return next_page
 
 
-def get_scroll_page_data(scroll_page):
+def get_scroll_page_data(scroll_page,bs_category):
     id_list = []
     index_list = []
     bs_category = "zg_bs_300189"
 
     for item in scroll_page:
         index_list.append(int(item["metadataMap"]["render.zg.rank"]) -1)
+        id_item = {}
+        id_item["id"] = item["id"]
 
     offset = 0
     if len(index_list)>0:
