@@ -133,7 +133,26 @@ def get_next_page_url(html):
 
 
 def get_scroll_page_data(scroll_page):
-    return {}
+    id_list = []
+    index_list = []
+    bs_category = "zg_bs_300189"
+
+    for item in scroll_page:
+        index_list.append(int(item["metadataMap"]["render.zg.rank"]) -1)
+
+    offset = 0
+    if len(index_list)>0:
+        offset = index_list[0]
+
+    data = {
+        "faceoutkataname": "GeneralFaceout",
+        "ids": id_list,
+        "indexes" : index_list,
+        "linkparameters": "",
+        "offset": offset,
+        "reftagprefix": bs_category
+    }
+    return data
 
 
 def get_scroll_page_item(data, cookies, token):
