@@ -1,4 +1,5 @@
 import logging
+import time
 
 import requests
 from lxml import etree
@@ -55,33 +56,36 @@ for catalog in catalog_list:
 """
 类目链接存放数据库后，拿到类目链接，请求首页
 """
-url_first = "https://www.amazon.com/Best-Sellers-Electronics-Computer-Routers/zgbs/electronics/300189"
-
-headers_first = {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Cache-Control": "no-cache",
-    "Pragma": "no-cache",
-    "Sec-Ch-Ua": "\"Google Chrome\";v=\"113\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"",
-    "Sec-Ch-Ua-Mobile": "?0",
-    "Sec-Ch-Ua-Platform": "\"Windows\"",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-    "Sec-Fetch-User": "?1",
-    "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
-}
-response = requests.get(url_first, headers=headers_first)
 
 
-cookies_first = {}
+def get_cookie(response, cookie):
+    if response.status_code == 429:
+        cookies = response.cookies
+        session_id = cookies.get("session-id")
+        session_id_time = cookies.get("session-id-time")
+        i_pref = cookies.get("i18n-prefs")
+        sp_cdn = cookies.get("sp-cdn")
+        cookie["session-id"] = session_id
+        cookie["session-id-time"] = session_id_time
+        cookie["i18n-prefs"] = i_pref
+        cookie["sp-cdn"] = sp_cdn
+        return cookie
+    elif response.status_code == 200:
+        ubid_main = response.cookies.get("ubid-main")
+        if ubid_main:
+            cookie["ubid-main"] = ubid_main
+        ue_id = re.findall("ar ue_id = '(.*?)',", response.text)[0]
+        if ue_id:
+            cookie["csm-hit"] = "tb:s-" + ue_id + "|" + str(int(time.time()*1000)) + '&t:' + str(int(time.time()*1000)) + "&adb:adblk_no"
+        return cookie
 
-def get_cookie_hit(ue_id):
-    pass
+def get_token(response):
+    if response.status_code == 200:
+        token = re.findall('data-acp-params="(.*?)"', response.text)[0]
+        return token
 
 def parse_rank_first(response):
+    first_page_item = []
     html = etree.HTML(response.text)
     pre_link = "https://www.amazon.com"
     # 获取title
@@ -117,47 +121,78 @@ def parse_rank_first(response):
             picture.split("[600,400],\"")) > 0 and len(
             picture.split("[600,400],\"")[1].split("\":[900,600]}")) > 0 else ""
         item['ranking'] = ranking
-        print(item)
+        first_page_item.append(item)
+    return first_page_item
 
-if response.status_code == 429:
-    cookies = response.cookies
-    session_id = cookies.get("session-id")
-    session_id_time = cookies.get("session-id-time")
-    i_pref = cookies.get("i18n-prefs")
-    sp_cdn = cookies.get("sp-cdn")
-
-    cookies_first = {
-        "session-id": session_id,
-        "session-id-time": session_id_time,
-        "i18n-prefs": i_pref,
-        "sp-cdn": sp_cdn
-    }
-
-    response = requests.get(url_first, headers=headers_first, cookies=cookies_first)
-
-    print(response.status_code)
-    print(response.text)
-elif response.status_code == 200:
-    html = etree.HTML(response.text)
-    test_path = html.xpath('//div[@class="_cDEzb_p13n-sc-css-line-clamp-3_g3dy1"]/text()')
-    if test_path:
-        parse_rank_first(response)
-        # 这一页的翻滚数据
-        next_page = html.xpath('//div[@class="p13n-desktop-grid"]/@data-client-recs-list')[0]
-        print(next_page)
-    else:
-        # 如果没有拿到数据，则需要生成cookie再请求
-        ubid_main = response.cookies.get("ubid-main")
-        ue_id = re.findall("ar ue_id = '(.*?)',", response.text)[0]
-        cookies_first["ubid-main":] = ubid_main
-        cookies_first["csm-hit"] =get_cookie_hit(ue_id)
-        response = requests.get(url_first, headers=headers_first, cookies=cookies_first)
-        if response.status_code == 200:
-            parse_rank_first(response)
-        else:
-            logging.log("数据解析错误")
+def get_next_page_url(html):
+    next_page = ""
+    page_url = html.xpath('//li[@class="a-last"]/a/@href')
+    if page_url and isinstance(page_url, list) and len(page_url) > 0:
+        next_page = "https://www.amazon.com" + page_url[0]
+    return next_page
 
 
-def get_next_page(response):
-    # 获取token
-    token = re.findall('data-acp-params="(.*?)"', response)[0]
+def get_scroll_page_data(scroll_page):
+    return {}
+
+
+def get_scroll_page_item(data, cookies, token):
+    return []
+
+
+def get_page(url, page_type, cookies):
+    if page_type == "FIRST_PAGE_REQUEST" or page_type == "OTHER_PAGE_REQUEST_FIRST":
+        headers_first = {
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Sec-Ch-Ua": "\"Google Chrome\";v=\"113\", \"Chromium\";v=\"113\", \"Not-A.Brand\";v=\"24\"",
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": "\"Windows\"",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+        }
+        for i in range(3):
+            if cookies:
+                response = requests.get(url, headers=headers_first, cookies=cookies)
+            else:
+                response = requests.get(url, headers=headers_first)
+            if response.status_code == 429:
+                cookies = get_cookie(response, cookies)
+                continue
+            elif response.status_code == 200:
+                html = etree.HTML(response.text)
+                test_path = html.xpath('//div[@class="_cDEzb_p13n-sc-css-line-clamp-3_g3dy1"]/text()')
+                cookies = get_cookie(response, cookies)
+                if test_path:
+                    first_page_item = parse_rank_first(response)
+                    scroll_page = html.xpath('//div[@class="p13n-desktop-grid"]/@data-client-recs-list')[0]
+                    data = get_scroll_page_data(scroll_page)
+                    token = get_token(response)
+                    scroll_page_item = get_scroll_page_item(data,cookies,token)
+                    first_page_item += scroll_page_item
+                    next_page_url = get_next_page_url(html)
+                    return first_page_item, next_page_url
+                else:
+                    continue
+            else:
+                logging.log("未知的错误" + response.status_code + response.text)
+
+page_first = "https://www.amazon.com/Best-Sellers-Electronics-Computer-Routers/zgbs/electronics/300189"
+
+
+frist_page_data,next_page_url  = get_page(page_first, "FIRST_PAGE_REQUEST", {})
+
+print(frist_page_data)
+print(next_page_url)
+
+if len(next_page_url):
+    next_page_data,next_page_url = get_page(next_page_url, "OTHER_PAGE_REQUEST_FIRST",{})
+    print(next_page_data)
+    print(next_page_url)
