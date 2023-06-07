@@ -149,7 +149,7 @@ data = {
     "pageType": "zeitgeist",
     "actionSource": "glow"
 }
-response = requests.post(url, headers=headers, cookies=cookies, params=params, data=data)
+response = requests.post(url_address, headers=headers, cookies=cookies, params=params, data=data)
 print(response.text)
 
 
