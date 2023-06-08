@@ -771,6 +771,11 @@ if (window.ue_ihe === 1) {
     )(ue_csm, window);
 
     (function (l, e) {
+            /*
+                a = window.ue // 需要测试什么时候是b什么时候是s
+                a.oid == + a.lid // 需要测试
+                a.tabid // 需要测试是什么
+             */
             function c(b) {
 
                 b = "";
