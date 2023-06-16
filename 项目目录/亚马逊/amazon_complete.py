@@ -255,14 +255,20 @@ def get_page(url, page_type, cookies):
                 logging.log("未知的错误" + response.status_code + response.text)
 
 
-page_first = "https://www.amazon.com/Best-Sellers-Computers-Accessories-Whole-Home-Mesh-Wi-Fi-Systems/zgbs/pc/17935294011/ref=zg_bs_pg_1?_encoding=UTF8&pg=1"
 
-frist_page_data, next_page_url = get_page(page_first, "FIRST_PAGE_REQUEST", {})
 
-# print(frist_page_data)
-# print(next_page_url)
 
-if len(next_page_url):
-    next_page_data, next_page_url = get_page(next_page_url, "OTHER_PAGE_REQUEST_FIRST", {})
-    # print(next_page_data)
-    # print(next_page_url)
+
+
+
+
+
+if __name__ == '__main__':
+    page_first = "https://www.amazon.com/Best-Sellers-Computers-Accessories-Whole-Home-Mesh-Wi-Fi-Systems/zgbs/pc/17935294011/ref=zg_bs_pg_1?_encoding=UTF8&pg=1"
+    frist_page_data, next_page_url = get_page(page_first, "FIRST_PAGE_REQUEST", {})
+    print(frist_page_data)
+    print(next_page_url)
+    if len(next_page_url):
+        next_page_data, next_page_url = get_page(next_page_url, "OTHER_PAGE_REQUEST_FIRST", {})
+        print(next_page_data)
+        print(next_page_url)
