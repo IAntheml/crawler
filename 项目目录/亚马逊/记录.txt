@@ -51,4 +51,23 @@ DEFAULT CHARACTER SET=utf8mb3;
 ===获取token的方法
 
 
+update cookie的逻辑：
 
+	刚开始请求无csm-hit时，csm-hit=tb:s-AKC4RXRGQ5CSVV7D803G|1687319437463&t:1687319437655&adb:adblk_no
+
+	第二步：csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319473460&t:1687319473460&adb:adblk_no
+
+	第三步：如果有返回更新：csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687319765984&t:1687319765984&adb:adblk_no'
+
+	第四步：token，如果有返回token则设置到session-token
+
+
+
+https://www.amazon.com/gp/bestsellers/pc/17935294011/ref=pd_zg_hrsr_pc
+
+
+get-rendered-address-selections接口
+
+
+
+address-change接口
