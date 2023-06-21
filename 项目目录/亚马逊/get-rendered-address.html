@@ -1,0 +1,38 @@
+<div id='Condo'>
+    <div id='GLOWFeature_AddressList'>
+        <div id='GLUXAddressBlock'>
+            <div className='a-section a-padding-none a-row a-spacing-small'><span
+                    className='a-text a-color-secondary a-spacing-medium a-size-small'>Delivery options and delivery speeds may vary for different locations</span>
+            </div>
+            <span className='a-button a-button-primary a-button-span12' id='GLUXSignInButton'><span
+                    className='a-button-inner a-declarative' data-action='GLUXSignInAction'><input
+                    className='a-button-input' type='submit' aria-label='Sign in to update your location'><span
+                    className='a-button-text' aria-hidden='true'>Sign in to update your location</span></span></span>
+        </div>
+        <div className='GLUX_Hidden' id='GLUXHiddenSuccessDialog'><span className='a-list-item'><span
+                className='GLUX_Block a-size-medium GLUX_Success_Row a-row'><div className='GLUX_Pin_Image'/><div
+                className='a-text-left a-column a-span11 a-span-last'><div
+                id='GLUXHiddenSuccessSelectedAddressPlaceholder'/></div></span></span>
+            <div className='a-size-small a-text a-color-tertiary a-spacing-top-base' id='GLUXHiddenSuccessSubText'>
+                Delivery options may vary for different locations
+            </div>
+            <div className='a-size-small,a-text,a-color-tertiary,a-spacing-top-base GLUX_Hidden'
+                 id='GLUXHiddenSuccessSubTextAisEgress'>We will use your selected location to show all products
+                available for the <strong>United States</strong>. Additional language and currency settings may not be
+                available.
+            </div>
+            <div className='a-size-small a-text a-color-tertiary GLUX_Hidden' id='GLUXHiddenSuccessFooter'><span
+                    className='a-button a-column a-button-primary a-button-span4'><span
+                    className='a-button-inner a-declarative' data-action='GLUXConfirmAction'><input
+                    className='a-button-input' id='GLUXConfirmClose' aria-labelledby='GLUXConfirmClose-announce'
+                    type='submit'><span className='a-button-text' id='GLUXConfirmClose-announce'>Continue</span></span></span>
+            </div>
+        </div>
+        <script type="text/javascript">P.now("GLUXWidget").execute(function (GLUXWidget) {
+            if (GLUXWidget === undefined) {
+                P.declare("GLUXWidget", {
+                    IDs: {"SIGNIN_BUTTON": "GLUXSignInButton"},
+                    ACTIONS: {"SIGNIN": "GLUXSignInAction"}
+                });
+            }
+        });</script>
