@@ -13,12 +13,14 @@ CREATE TABLE `amazon_listing_table` (
 `rating_count`  bigint(20) NOT NULL DEFAULT 0 ,
 `bullet_point`  text CHARACTER SET utf8mb3 NOT NULL ,
 `new_version`  varchar(64) CHARACTER SET utf8mb3 NULL,
+`crawler_date` datetime NOT NULL,
 PRIMARY KEY (`id`),
 UNIQUE INDEX `amazon_key_asin` (`asin`) ,
 INDEX `amazon_key_brand` (`brand`) ,
 INDEX `amazon_key_price` (`price`) ,
 INDEX `amazon_key_rating_level` (`rating_level`),
-INDEX `amazon_key_category` (`category`)
+INDEX `amazon_key_category` (`category`),
+INDEX `amazon_key_crawler_date` (`crawler_date`)
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb3;

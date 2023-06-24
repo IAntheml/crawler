@@ -94,7 +94,7 @@ def get_token(response):
 
 
 def parse_rank_first(response):
-    first_page_item = []
+    page_item = []
     html = etree.HTML(response.text)
     pre_link = "https://www.amazon.com"
     # 获取title
@@ -130,8 +130,8 @@ def parse_rank_first(response):
             picture.split("[600,400],\"")) > 0 and len(
             picture.split("[600,400],\"")[1].split("\":[900,600]}")) > 0 else ""
         item['ranking'] = ranking
-        first_page_item.append(item)
-    return first_page_item
+        page_item.append(item)
+    return page_item
 
 
 def get_next_page_url(html):
