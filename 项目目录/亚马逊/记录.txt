@@ -13,12 +13,14 @@ CREATE TABLE `amazon_listing_table` (
 `rating_count`  bigint(20) NOT NULL DEFAULT 0 ,
 `bullet_point`  text CHARACTER SET utf8mb3 NOT NULL ,
 `new_version`  varchar(64) CHARACTER SET utf8mb3 NULL,
+`crawler_date` datetime NOT NULL,
 PRIMARY KEY (`id`),
 UNIQUE INDEX `amazon_key_asin` (`asin`) ,
 INDEX `amazon_key_brand` (`brand`) ,
 INDEX `amazon_key_price` (`price`) ,
 INDEX `amazon_key_rating_level` (`rating_level`),
-INDEX `amazon_key_category` (`category`)
+INDEX `amazon_key_category` (`category`),
+INDEX `amazon_key_crawler_date` (`crawler_date`)
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb3;
@@ -49,6 +51,47 @@ DEFAULT CHARACTER SET=utf8mb3;
 
 
 ===获取token的方法
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; csm-hit=tb:s-AKC4RXRGQ5CSVV7D803G|1687319437463&t:1687319437655&adb:adblk_no'
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319473460&t:1687319473460&adb:adblk_no'
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319494074&t:1687319494074&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319505651&t:1687319505651&adb:adblk_no; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg="'
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319554469&t:1687319554469&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg=";
+
+
+csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-AKC4RXRGQ5CSVV7D803G|1687319595253&t:1687319595253&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg=";
+
+
+csm-hit=tb:s-XPGW62DKE5VSGH80AQBZ|1687319618320&t:1687319618381&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687319765984&t:1687319765984&adb:adblk_no'
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="RMYvAE8Q4/CnHQhY7we8F/zVPDvMkxsrHFVA6tdUofnX/atCq/EDNbAjaydyWadkJWaYPNU6eGjGjd/xO9DAPqtZdFM2V8dy6nJfgtTZdo5pizZxd/MF5+WVjZTNLQIGF9Lcdgcir8BL8iUjoTtG73Eo7xDRAqaiVBzsWIRyCUzemGE6AykfW/mTZt2fcb6tG3fSD3IdRe17nymvY2o4luLzPZM4YKB9frfNguM38bg="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687325782121&t:1687325782121&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687325866144&t:1687325866144&adb:adblk_no; session-token="+XwzmtinT1WW/bNmim1WhsQTu72DyYbnvjbmg8mEWE9TRU3kExLUBQAdIRj9+/dc5VmSeqURxKXnIyfi2M/ROq4P6nebK+FhyXmE4g94TDXwkfgy04Igf+lYC0GUx1DtYf0J3kvnCZVo4Ss3bVV69BAMaqAM5pPSP/oaLaap2Y1xvazwRORlQnFukGGQYVHFpZfEfJ2bzee7FhlqKdFp775Pp2JdbDvI9OcsphEp6Xo="'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="+XwzmtinT1WW/bNmim1WhsQTu72DyYbnvjbmg8mEWE9TRU3kExLUBQAdIRj9+/dc5VmSeqURxKXnIyfi2M/ROq4P6nebK+FhyXmE4g94TDXwkfgy04Igf+lYC0GUx1DtYf0J3kvnCZVo4Ss3bVV69BAMaqAM5pPSP/oaLaap2Y1xvazwRORlQnFukGGQYVHFpZfEfJ2bzee7FhlqKdFp775Pp2JdbDvI9OcsphEp6Xo="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687325918001&t:1687325918001&adb:adblk_no'
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="+XwzmtinT1WW/bNmim1WhsQTu72DyYbnvjbmg8mEWE9TRU3kExLUBQAdIRj9+/dc5VmSeqURxKXnIyfi2M/ROq4P6nebK+FhyXmE4g94TDXwkfgy04Igf+lYC0GUx1DtYf0J3kvnCZVo4Ss3bVV69BAMaqAM5pPSP/oaLaap2Y1xvazwRORlQnFukGGQYVHFpZfEfJ2bzee7FhlqKdFp775Pp2JdbDvI9OcsphEp6Xo="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687326088170&t:1687326088170&adb:adblk_no'
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="+XwzmtinT1WW/bNmim1WhsQTu72DyYbnvjbmg8mEWE9TRU3kExLUBQAdIRj9+/dc5VmSeqURxKXnIyfi2M/ROq4P6nebK+FhyXmE4g94TDXwkfgy04Igf+lYC0GUx1DtYf0J3kvnCZVo4Ss3bVV69BAMaqAM5pPSP/oaLaap2Y1xvazwRORlQnFukGGQYVHFpZfEfJ2bzee7FhlqKdFp775Pp2JdbDvI9OcsphEp6Xo="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-XPGW62DKE5VSGH80AQBZ|1687326114144&t:1687326114144&adb:adblk_no'
+
+
+'session-id=143-5970721-6806429; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=131-1913826-1080417; session-token="+XwzmtinT1WW/bNmim1WhsQTu72DyYbnvjbmg8mEWE9TRU3kExLUBQAdIRj9+/dc5VmSeqURxKXnIyfi2M/ROq4P6nebK+FhyXmE4g94TDXwkfgy04Igf+lYC0GUx1DtYf0J3kvnCZVo4Ss3bVV69BAMaqAM5pPSP/oaLaap2Y1xvazwRORlQnFukGGQYVHFpZfEfJ2bzee7FhlqKdFp775Pp2JdbDvI9OcsphEp6Xo="; csm-hit=tb:AKC4RXRGQ5CSVV7D803G+s-RCKE27E3NR145RZAJ9KJ|1687326162662&t:1687326162662&adb:adblk_no'
+
 
 
 update cookie的逻辑：
